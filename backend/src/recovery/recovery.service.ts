@@ -45,9 +45,9 @@ export class RecoveryService {
         return galaxy;
     }
 
-    async updateGalaxy(id: number, updateGalaxyDto: UpdateGalaxyDto) {
+    async updateGalaxy(walletAddress: string, updateGalaxyDto: UpdateGalaxyDto) {
         const galaxy = await this.galaxyRepository.findOne({ 
-            where: { id }, 
+            where: { recoveryAddress: walletAddress }, 
             relations: ['guardians'] 
         });
         if (!galaxy) {
@@ -59,7 +59,7 @@ export class RecoveryService {
 
         // Handle guardians update if provided
         if (updateGalaxyDto.guardians) {
-            // Remove existing guardians
+            // Remove existing guardians - use the galaxy ID instead of nested relation
             await this.guardiansRepository.delete({ galaxy: { id: galaxy.id } });
             
             // Create new guardians
@@ -80,6 +80,6 @@ export class RecoveryService {
         }
 
         await this.galaxyRepository.save(galaxy);
-        return 
+        return
     }
 }

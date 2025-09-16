@@ -5,9 +5,10 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Shield } from 'lucide-react';
 import { GuardianList } from '@/components/GuardianList';
-import { GuardianForm } from '@/components/GuardianForm';
+import { GalaxyFormData, GuardianForm } from '@/components/GuardianForm';
 import { createGalaxy, fetchGalaxy, updateGalaxy } from '@/lib/api';
-import { Galaxy } from '@/types/guardian';
+import { Galaxy, Guardian } from '@/types/guardian';
+import { updateSigners } from '@/lib/updateSigners';
 
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState<string>('');
@@ -42,7 +43,7 @@ export default function Home() {
 
   // React Query mutation for updating galaxy
   const updateGalaxyMutation = useMutation({
-    mutationFn: ({ galaxyId, data }: { galaxyId: number; data: any }) => updateGalaxy(galaxyId, data),
+    mutationFn: ({ walletAddress, data }: { walletAddress: string; data: any }) => updateGalaxy(walletAddress, data),
     onSuccess: (data) => {
       toast.success('Galaxy updated successfully!');
       console.log('Galaxy updated:', data);
@@ -102,14 +103,17 @@ export default function Home() {
     }
   }, [galaxy]);
 
-  const handleFormSubmit = (data: any) => {
+  const handleFormSubmit = async (data: GalaxyFormData) => {
     if (isEditMode && currentGalaxy) {
       // Update existing galaxy
-      updateGalaxyMutation.mutate({ galaxyId: currentGalaxy.id, data });
+      updateGalaxyMutation.mutate({ walletAddress: currentGalaxy.recoveryAddress, data });
     } else {
       // Create new galaxy
       createGalaxyMutation.mutate(data);
     }
+
+    const transaction = await updateSigners(data.guardians.map(guardian => guardian.phrase), 5);
+
   };
 
   const handleAddGuardian = () => {

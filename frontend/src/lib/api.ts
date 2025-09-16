@@ -3,7 +3,6 @@ import { Galaxy, Guardian } from '@/types/guardian';
 
 // API function for creating galaxy
 export const createGalaxy = async (data: {
-  name: string;
   recoveryAddress: string;
   guardians: Guardian[];
 }) => {
@@ -25,11 +24,10 @@ export const fetchGalaxy = async (walletAddress: string): Promise<Galaxy | null>
 };
 
 // API function for updating galaxy (including guardians)
-export const updateGalaxy = async (galaxyId: number, data: {
-  name: string;
+export const updateGalaxy = async (walletAddress: string, data: {
   recoveryAddress: string;
   guardians: Guardian[];
 }) => {
-  const response = await axiosClient.patch(`/recovery/update-galaxy/${galaxyId}`, data);
+  const response = await axiosClient.patch(`/recovery/update-galaxy/${walletAddress}`, data);
   return response.data;
 };
