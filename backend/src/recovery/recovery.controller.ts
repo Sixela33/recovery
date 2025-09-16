@@ -16,12 +16,9 @@ export class RecoveryController {
       return this.recoveryService.getGalaxy(walletAddress);
     }
 
-    @Patch('update-galaxy/:id')
-    async updateGalaxy(@Param('id') id: number, @Body() updateGalaxyDto: UpdateGalaxyDto) {
-      
-      console.log(updateGalaxyDto);
-      const response = await this.recoveryService.updateGalaxy(id, updateGalaxyDto);
-      console.log("response", response);
+    @Patch('update-galaxy/:walletAddress')
+    async updateGalaxy(@Param('walletAddress') walletAddress: string, @Body() updateGalaxyDto: UpdateGalaxyDto) {
+      const response = await this.recoveryService.updateGalaxy(walletAddress, updateGalaxyDto);
       return response;
     }
 }
