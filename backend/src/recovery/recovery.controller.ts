@@ -6,7 +6,6 @@ import { CreateGalaxyDto } from './dto/create-galaxy.dto';
 export class RecoveryController {
   constructor(private readonly recoveryService: RecoveryService) {}
 
-
     @Post('create-galaxy')
     createGalaxy(@Body() createGalaxyDto: CreateGalaxyDto) {
       return this.recoveryService.createGalaxy(createGalaxyDto);

@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RecoveryModule } from './recovery/recovery.module';
+import { StellarService } from './recovery/services/stellar.service';
 
 @Module({
   imports: [
