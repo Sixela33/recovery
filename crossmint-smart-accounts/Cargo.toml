@@ -1,0 +1,50 @@
+[workspace]
+resolver = "2"
+members = [
+  "contracts/contract-factory",
+  "contracts/examples/plugin-policy-example",
+  "contracts/initializable",
+  "contracts/smart-account",
+  "contracts/smart-account-interfaces",
+  "contracts/storage",
+  "contracts/testing/hello-world",
+  "contracts/upgradeable",
+]
+
+[workspace.package]
+license = "Apache-2.0"
+
+[workspace.dependencies]
+soroban-sdk = "22.0.0"
+smart-account = { path = "contracts/smart-account" }
+contract-factory = { path = "contracts/contract-factory" }
+initializable = { path = "contracts/initializable" }
+storage = { path = "contracts/storage" }
+upgradeable = { path = "contracts/upgradeable" }
+deny-list-policy = { path = "contracts/deny-list-policy" }
+smart-account-interfaces = { path = "contracts/smart-account-interfaces" }
+plugin-policy-example = { path = "contracts/examples/plugin-policy-example" } 
+hello-world = { path = "contracts/testing/hello-world" } 
+
+[profile.release]
+opt-level = "z"
+overflow-checks = true
+debug = 0
+strip = "symbols"
+debug-assertions = false
+panic = "abort"
+codegen-units = 1
+lto = true
+
+# For more information about this profile see https://soroban.stellar.org/docs/basic-tutorials/logging#cargotoml-profile
+[profile.release-with-logs]
+inherits = "release"
+debug-assertions = true
+
+[profile.test]
+opt-level = 1
+debug = false
+debug-assertions = true
+overflow-checks = true
+incremental = true
+codegen-units = 256
