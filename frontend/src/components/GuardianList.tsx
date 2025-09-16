@@ -85,11 +85,10 @@ export function GuardianList({
                     Edit
                   </Button>
                   <Button
-                    variant="outline"
+                    variant="destructive"
                     size="sm"
                     onClick={() => onDeleteGuardian(index)}
                     disabled={isLoading}
-                    className="text-destructive hover:text-destructive"
                   >
                     <Trash2 className="h-3 w-3" />
                   </Button>

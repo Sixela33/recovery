@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Guardians Recovery App",
+  title: "Recovery",
   description: "Secure wallet recovery with guardian system",
 };
 

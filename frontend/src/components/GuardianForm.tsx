@@ -111,7 +111,7 @@ export function GuardianForm({
       </div>
 
       {/* Wallet Connection Status */}
-      {isConnected ? (
+      {isConnected && walletAddress ? (
         <div className="p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
           <div className="flex items-center">
             <div className="h-2 w-2 bg-green-500 rounded-full mr-2"></div>
@@ -120,16 +120,7 @@ export function GuardianForm({
             </span>
           </div>
         </div>
-      ) : (
-        <div className="p-4 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-          <div className="flex items-center">
-            <div className="h-2 w-2 bg-yellow-500 rounded-full mr-2"></div>
-            <span className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-              Please connect your wallet to create a galaxy
-            </span>
-          </div>
-        </div>
-      )}
+      ) : null}
 
       {/* Form */}
       <Form {...form}>
@@ -145,7 +136,7 @@ export function GuardianForm({
                   <Input
                     placeholder="Enter the wallet address to be recovered"
                     {...field}
-                    disabled={isConnected || isLoading}
+                    disabled={!isConnected || isLoading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -245,7 +236,7 @@ export function GuardianForm({
           <div className="pt-6">
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-blue-600 hover:bg-blue-700 h-12"
               disabled={!isConnected || isLoading}
             >
               {isLoading ? (

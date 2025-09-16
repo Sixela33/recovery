@@ -1,15 +1,14 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { toast } from 'sonner';
-import { Shield } from 'lucide-react';
 import { GuardianList } from '@/components/GuardianList';
 import { GuardianForm } from '@/components/GuardianForm';
 import { createGalaxy, fetchGalaxy, updateGalaxy } from '@/lib/api';
 import { Galaxy } from '@/types/guardian';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
-export default function Home() {
+export default function Guardians() {
   const [walletAddress, setWalletAddress] = useState<string>('');
   const [isConnected, setIsConnected] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -138,10 +137,10 @@ export default function Home() {
   // Show loading state while checking for existing galaxy
   if (galaxyLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading your galaxy...</p>
+          <p className="text-muted-foreground">Loading your guardians...</p>
         </div>
       </div>
     );
@@ -150,26 +149,28 @@ export default function Home() {
   // Show connection screen if wallet is not connected
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-white">
         <main className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center py-16">
               <div className="h-16 w-16 rounded-lg bg-primary flex items-center justify-center mx-auto mb-6">
-                <Shield className="h-8 w-8 text-primary-foreground" />
+                <svg className="h-8 w-8 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                </svg>
               </div>
-              <h1 className="text-3xl font-bold mb-4">Welcome to Recovery</h1>
-              <p className="text-muted-foreground text-lg mb-8">
-                Connect your wallet to create your galaxy and set up guardians for wallet recovery
+              <h1 className="text-3xl font-bold mb-4 text-gray-900">Guardians Panel</h1>
+              <p className="text-gray-600 text-lg mb-8">
+                Connect your wallet to manage your guardians and set up wallet recovery
               </p>
-              <div className="p-6 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg max-w-md mx-auto">
+              <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg max-w-md mx-auto">
                 <div className="flex items-center justify-center mb-2">
                   <div className="h-2 w-2 bg-yellow-500 rounded-full mr-2"></div>
-                  <span className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                  <span className="text-sm font-medium text-yellow-800">
                     Wallet Not Connected
                   </span>
                 </div>
-                <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                  Please connect your wallet using the button in the top right corner to get started.
+                <p className="text-sm text-yellow-700">
+                  Please connect your wallet using the button in the top right corner to access your guardians.
                 </p>
               </div>
             </div>
@@ -180,7 +181,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           {currentGalaxy && currentGalaxy.guardians.length > 0 && !showForm ? (
