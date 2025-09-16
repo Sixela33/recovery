@@ -18,7 +18,7 @@ Recovery is a decentralized wallet recovery service that allows any wallet holde
 
 The Recovery system operates on a **Guardian Galaxy** model:
 
-1. **Galaxy Creation**: Users create a recovery group by specifying:
+1. **Security Group Creation**: Users create a recovery group by specifying:
    - A recovery address that will be added to their wallet
    - A list of trusted guardians (contacts)
    - A threshold for how many guardian signatures are required for recovery
