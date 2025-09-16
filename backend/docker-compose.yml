@@ -1,0 +1,15 @@
+services:
+  recovery-db:
+    image: postgres:latest
+    container_name: recovery-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./recovery-db-data:/var/lib/postgresql/data
