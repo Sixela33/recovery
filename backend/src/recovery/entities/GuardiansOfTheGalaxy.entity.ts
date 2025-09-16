@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Galaxy } from "./Galaxy.entity";
+import { Exclude } from "class-transformer";
 
 @Entity()
 export class GuardiansOfTheGalaxy {

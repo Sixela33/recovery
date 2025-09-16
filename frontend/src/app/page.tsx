@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { GuardianList } from '@/components/GuardianList';
 import { GuardianForm } from '@/components/GuardianForm';
-import { createGalaxy, fetchGalaxy } from '@/lib/api';
+import { createGalaxy, fetchGalaxy, updateGalaxy } from '@/lib/api';
 import { Galaxy } from '@/types/guardian';
 
 export default function Home() {
@@ -13,6 +13,8 @@ export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [currentGalaxy, setCurrentGalaxy] = useState<Galaxy | null>(null);
+  const [editingGuardian, setEditingGuardian] = useState<{ guardian: any; index: number } | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   // Fetch galaxy for the connected wallet
   const { data: galaxy, isLoading: galaxyLoading, refetch: refetchGalaxy } = useQuery({
@@ -37,6 +39,24 @@ export default function Home() {
     },
   });
 
+  // React Query mutation for updating galaxy
+  const updateGalaxyMutation = useMutation({
+    mutationFn: ({ galaxyId, data }: { galaxyId: number; data: any }) => updateGalaxy(galaxyId, data),
+    onSuccess: (data) => {
+      toast.success('Galaxy updated successfully!');
+      console.log('Galaxy updated:', data);
+      setCurrentGalaxy(data);
+      setShowForm(false);
+      setIsEditMode(false);
+      setEditingGuardian(null);
+      refetchGalaxy();
+    },
+    onError: (error) => {
+      console.error('Error updating galaxy:', error);
+      toast.error('Failed to update galaxy. Please try again.');
+    },
+  });
+
   // Check wallet connection status
   useEffect(() => {
     const address = localStorage.getItem('walletAddress');
@@ -56,16 +76,25 @@ export default function Home() {
   }, [galaxy]);
 
   const handleFormSubmit = (data: any) => {
-    createGalaxyMutation.mutate(data);
+    if (isEditMode && currentGalaxy) {
+      // Update existing galaxy
+      updateGalaxyMutation.mutate({ galaxyId: currentGalaxy.id, data });
+    } else {
+      // Create new galaxy
+      createGalaxyMutation.mutate(data);
+    }
   };
 
   const handleAddGuardian = () => {
+    setIsEditMode(false);
+    setEditingGuardian(null);
     setShowForm(true);
   };
 
-  const handleEditGuardian = (index: number) => {
-    // TODO: Implement edit functionality
-    console.log('Edit guardian:', index);
+  const handleEditGuardian = (guardian: any, index: number) => {
+    setEditingGuardian({ guardian, index });
+    setIsEditMode(true);
+    setShowForm(true);
   };
 
   const handleDeleteGuardian = (index: number) => {
@@ -75,6 +104,8 @@ export default function Home() {
 
   const handleBackToList = () => {
     setShowForm(false);
+    setIsEditMode(false);
+    setEditingGuardian(null);
   };
 
   // Show loading state while checking for existing galaxy
@@ -109,7 +140,9 @@ export default function Home() {
               isConnected={isConnected}
               onSubmit={handleFormSubmit}
               onBack={currentGalaxy && currentGalaxy.guardians.length > 0 ? handleBackToList : undefined}
-              isLoading={createGalaxyMutation.isPending}
+              isLoading={createGalaxyMutation.isPending || updateGalaxyMutation.isPending}
+              galaxy={isEditMode && currentGalaxy ? currentGalaxy : undefined}
+              isEditMode={isEditMode}
             />
           )}
         </div>

@@ -24,18 +24,12 @@ export const fetchGalaxy = async (walletAddress: string): Promise<Galaxy | null>
   }
 };
 
-// API function for updating guardian (placeholder - would need backend implementation)
-export const updateGuardian = async (
-  walletAddress: string,
-  guardianIndex: number,
-  data: Guardian
-) => {
-  // This would need to be implemented in the backend
-  throw new Error('Update guardian functionality not yet implemented');
-};
-
-// API function for deleting guardian (placeholder - would need backend implementation)
-export const deleteGuardian = async (walletAddress: string, guardianIndex: number) => {
-  // This would need to be implemented in the backend
-  throw new Error('Delete guardian functionality not yet implemented');
+// API function for updating galaxy (including guardians)
+export const updateGalaxy = async (galaxyId: number, data: {
+  name: string;
+  recoveryAddress: string;
+  guardians: Guardian[];
+}) => {
+  const response = await axiosClient.patch(`/recovery/update-galaxy/${galaxyId}`, data);
+  return response.data;
 };

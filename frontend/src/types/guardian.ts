@@ -13,4 +13,6 @@ export interface Galaxy {
   name: string;
   recoveryAddress: string;
   guardians: Guardian[];
+  createdAt?: string;
+  updatedAt?: string;
 }

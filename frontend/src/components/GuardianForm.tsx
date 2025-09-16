@@ -14,15 +14,20 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Plus, Trash2, Shield, Users, ArrowLeft } from 'lucide-react';
+import { Plus, Trash2, Shield, Users, ArrowLeft, Save } from 'lucide-react';
 
 // Validation schema for form input (simplified version of Guardian)
 const guardianSchema = z.object({
+  id: z.number().optional(),
   email: z.string().email('Please enter a valid email address'),
   phrase: z.string().min(1, 'Phrase is required'),
+  account: z.string().optional(),
+  privateKey: z.string().optional(),
 });
 
 const galaxySchema = z.object({
+  id: z.number().optional(),
+  name: z.string().min(1, 'Galaxy name is required'),
   recoveryAddress: z.string().min(1, 'Recovery address is required'),
   guardians: z.array(guardianSchema).min(1, 'At least one guardian is required'),
 });
@@ -35,6 +40,8 @@ interface GuardianFormProps {
   onSubmit: (data: GalaxyFormData) => void;
   onBack?: () => void;
   isLoading?: boolean;
+  galaxy?: GalaxyFormData; // For editing existing galaxy
+  isEditMode?: boolean;
 }
 
 export function GuardianForm({ 
@@ -42,11 +49,14 @@ export function GuardianForm({
   isConnected, 
   onSubmit, 
   onBack,
-  isLoading = false 
+  isLoading = false,
+  galaxy,
+  isEditMode = false
 }: GuardianFormProps) {
   const form = useForm<GalaxyFormData>({
     resolver: zodResolver(galaxySchema),
-    defaultValues: {
+    defaultValues: galaxy || {
+      name: '',
       recoveryAddress: walletAddress,
       guardians: [{ email: '', phrase: '' }],
     },
@@ -90,10 +100,15 @@ export function GuardianForm({
           <div className="h-12 w-12 rounded-lg bg-primary flex items-center justify-center mr-3">
             <Shield className="h-6 w-6 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-bold">Create Your Galaxy</h1>
+          <h1 className="text-3xl font-bold">
+            {isEditMode ? 'Edit Your Galaxy' : 'Create Your Galaxy'}
+          </h1>
         </div>
         <p className="text-muted-foreground">
-          Set up guardians to protect your wallet and enable recovery
+          {isEditMode 
+            ? 'Update your guardians to protect your wallet and enable recovery'
+            : 'Set up guardians to protect your wallet and enable recovery'
+          }
         </p>
       </div>
 
@@ -121,6 +136,25 @@ export function GuardianForm({
       {/* Form */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          {/* Galaxy Name */}
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Galaxy Name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter a name for your galaxy"
+                    {...field}
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* Recovery Address */}
           <FormField
             control={form.control}
@@ -236,11 +270,15 @@ export function GuardianForm({
               disabled={!isConnected || isLoading}
             >
               {isLoading ? (
-                'Creating Galaxy...'
+                isEditMode ? 'Updating Galaxy...' : 'Creating Galaxy...'
               ) : (
                 <>
-                  <Shield className="h-4 w-4 mr-2" />
-                  Create Galaxy
+                  {isEditMode ? (
+                    <Save className="h-4 w-4 mr-2" />
+                  ) : (
+                    <Shield className="h-4 w-4 mr-2" />
+                  )}
+                  {isEditMode ? 'Update Galaxy' : 'Create Galaxy'}
                 </>
               )}
             </Button>

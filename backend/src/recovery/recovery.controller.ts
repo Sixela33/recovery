@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { RecoveryService } from './recovery.service';
-import { CreateGalaxyDto } from './dto/create-galaxy.dto';
+import { CreateGalaxyDto, UpdateGalaxyDto } from './dto/create-galaxy.dto';
 
 @Controller('recovery')
 export class RecoveryController {
@@ -14,5 +14,14 @@ export class RecoveryController {
     @Get('get-galaxy/:walletAddress')
     getGalaxy(@Param('walletAddress') walletAddress: string) {
       return this.recoveryService.getGalaxy(walletAddress);
+    }
+
+    @Patch('update-galaxy/:id')
+    async updateGalaxy(@Param('id') id: number, @Body() updateGalaxyDto: UpdateGalaxyDto) {
+      
+      console.log(updateGalaxyDto);
+      const response = await this.recoveryService.updateGalaxy(id, updateGalaxyDto);
+      console.log("response", response);
+      return response;
     }
 }

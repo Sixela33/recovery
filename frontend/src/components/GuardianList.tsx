@@ -10,14 +10,13 @@ import { Guardian } from '@/types/guardian';
 interface GuardianListProps {
   guardians: Guardian[];
   onAddGuardian: () => void;
-  onEditGuardian: (index: number) => void;
+  onEditGuardian: (guardian: Guardian, index: number) => void;
   onDeleteGuardian: (index: number) => void;
   isLoading?: boolean;
 }
 
 export function GuardianList({ 
   guardians, 
-  onAddGuardian, 
   onEditGuardian, 
   onDeleteGuardian,
   isLoading = false 
@@ -30,10 +29,6 @@ export function GuardianList({
           <Users className="h-6 w-6 mr-2" />
           <h2 className="text-2xl font-bold">Your Guardians</h2>
         </div>
-        <Button onClick={onAddGuardian} disabled={isLoading}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Guardian
-        </Button>
       </div>
 
       {/* Guardians Grid */}
@@ -82,7 +77,7 @@ export function GuardianList({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => onEditGuardian(index)}
+                    onClick={() => onEditGuardian(guardian, index)}
                     disabled={isLoading}
                     className="flex-1"
                   >
@@ -119,10 +114,6 @@ export function GuardianList({
                   Add guardians to protect your wallet and enable recovery
                 </p>
               </div>
-              <Button onClick={onAddGuardian} disabled={isLoading}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Your First Guardian
-              </Button>
             </div>
           </CardContent>
         </Card>

@@ -1,3 +1,4 @@
+import { PartialType } from '@nestjs/mapped-types';
 import { IsArray, IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 class GuardianDto {
@@ -22,4 +23,10 @@ export class CreateGalaxyDto{
   @IsArray()
   @IsNotEmpty()
   guardians: GuardianDto[];
+}
+
+export class UpdateGalaxyDto extends PartialType(CreateGalaxyDto) {
+  @IsString()
+  @IsNotEmpty()
+  recoveryAddress: string;
 }
