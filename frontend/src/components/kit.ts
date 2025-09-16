@@ -16,7 +16,6 @@ export const getKit = (): StellarWalletsKit => {
     if (!kit) {
         kit = new StellarWalletsKit({
             network: WalletNetwork.TESTNET,
-            selectedWalletId: XBULL_ID,
             modules: allowAllModules(),
         });
     }
@@ -35,10 +34,12 @@ export const createButton = () => {
         onConnect: ({ address}) => {
             // Storing the address in the local storage
             localStorage.setItem('walletAddress', address);
+            window.location.reload();
         },
         onDisconnect: () => {
           // Clearing the address from the local storage
           localStorage.removeItem('walletAddress');
+          window.location.reload();
         }
     });
 };

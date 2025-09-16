@@ -1,16 +1,12 @@
 "use client";
 import React, { useEffect } from 'react';
 import Link from 'next/link';
-import { getKit } from './kit';
+import { createButton } from './kit';
 import { ShieldIcon } from 'lucide-react';
 
 export default function navBar() {
     useEffect(() => {
-        getKit().createButton({
-          container: document.querySelector('#containerDiv') as HTMLElement,
-          onConnect: () => {},
-          onDisconnect: () => {}
-        })
+        createButton()
     }, [])
 
   return (
@@ -25,8 +21,11 @@ export default function navBar() {
               <span className="font-bold text-xl">Guardians</span>
             </Link>
           </div>
+          <div className="flex items-center space-x-2">
 
+            <div onClick={() => {localStorage.removeItem('walletAddress'); window.location.reload();}}>|</div>
             <div id="containerDiv" />
+          </div>
         </div>
       </div>
     </nav>
