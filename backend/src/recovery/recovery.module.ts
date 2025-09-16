@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Galaxy } from './entities/Galaxy.entity';
 import { GuardiansOfTheGalaxy } from './entities/GuardiansOfTheGalaxy.entity';
 import { StellarService } from './services/stellar.service';
+import { EmailService } from './services/email.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Galaxy, GuardiansOfTheGalaxy])],
   controllers: [RecoveryController],
-  providers: [RecoveryService, StellarService],
+  providers: [RecoveryService, StellarService, EmailService],
 })
 export class RecoveryModule {}

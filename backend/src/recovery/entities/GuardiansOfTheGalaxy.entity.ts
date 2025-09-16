@@ -16,6 +16,9 @@ export class GuardiansOfTheGalaxy {
   @Column()
   phrase: string;
 
+  @Column({ nullable: true })
+  recoverySecret: string
+
   @Column()
   privateKey: string;
 
