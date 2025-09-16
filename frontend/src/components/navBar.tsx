@@ -14,19 +14,19 @@ export default function navBar() {
     }, [])
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4">
+    <nav className="sticky top-0 z-50 w-full bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg">
+      <div className="container mx-auto px-6">
         <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg"><ShieldIcon /></span>
+          <div className="flex items-center space-x-3">
+            <Link href="/" className="flex items-center space-x-3">
+              <div className="h-10 w-10 rounded-lg bg-white/20 backdrop-blur flex items-center justify-center shadow-sm">
+                <ShieldIcon className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-xl">Guardians</span>
+              <span className="app-title text-white text-xl">Guardians</span>
             </Link>
           </div>
 
-            <div id="containerDiv" />
+          <div id="containerDiv" />
         </div>
       </div>
     </nav>
