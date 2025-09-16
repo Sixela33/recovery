@@ -21,4 +21,9 @@ export class RecoveryController {
       const response = await this.recoveryService.updateGalaxy(walletAddress, updateGalaxyDto);
       return response;
     }
+
+    @Post('begin-recovery')
+    beginRecovery(@Body() body: { key: string }) {
+      return this.recoveryService.beginRecovery(body.key);
+    }
 }

@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { StellarService } from './services/stellar.service';
 import { GuardiansOfTheGalaxy } from './entities/GuardiansOfTheGalaxy.entity';
+import { EmailService } from './services/email.service';
 
 @Injectable()
 export class RecoveryService {
@@ -15,6 +16,7 @@ export class RecoveryService {
         @InjectRepository(GuardiansOfTheGalaxy)
         private readonly guardiansRepository: Repository<GuardiansOfTheGalaxy>,
         private readonly stellarService: StellarService,
+        private readonly emailService: EmailService,
     ) {}
 
     createGalaxy(createGalaxyDto: CreateGalaxyDto) {
@@ -81,5 +83,21 @@ export class RecoveryService {
 
         await this.galaxyRepository.save(galaxy);
         return
+    }
+
+    async beginRecovery(key: string) {
+        const galaxy = await this.galaxyRepository.findOne({ where: { recoveryAddress: key } });
+        if (!galaxy) {
+            throw new NotFoundException('Galaxy not found');
+        }
+        const guardians = await this.guardiansRepository.find({ where: { galaxy: { id: galaxy.id } } });
+        for (const guardian of guardians) {
+            guardian.recoverySecret = guardian.privateKey;
+            await this.guardiansRepository.save(guardian);
+
+            await this.emailService.sendRecoveryEmail(guardian.email, guardian.recoverySecret, galaxy);
+        }
+
+        return galaxy;
     }
 }
