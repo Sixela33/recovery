@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { RecoveryService } from './recovery.service';
 import { CreateGalaxyDto } from './dto/create-galaxy.dto';
 
@@ -9,5 +9,10 @@ export class RecoveryController {
     @Post('create-galaxy')
     createGalaxy(@Body() createGalaxyDto: CreateGalaxyDto) {
       return this.recoveryService.createGalaxy(createGalaxyDto);
+    }
+
+    @Get('get-galaxy/:walletAddress')
+    getGalaxy(@Param('walletAddress') walletAddress: string) {
+      return this.recoveryService.getGalaxy(walletAddress);
     }
 }

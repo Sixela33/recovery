@@ -9,7 +9,7 @@ export class Galaxy {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   recoveryAddress: string; // The address that will be added to the recovered wallet
 
   @OneToMany(() => GuardiansOfTheGalaxy, (guardian) => guardian.galaxy, { cascade: true })

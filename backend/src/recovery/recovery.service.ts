@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGalaxyDto } from './dto/create-galaxy.dto';
 import { Galaxy } from './entities/Galaxy.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -22,7 +22,8 @@ export class RecoveryService {
         for (const guardian of createGalaxyDto.guardians) {
             const stellarAccount = this.stellarService.createAccount();
             const guardianEntity = new GuardiansOfTheGalaxy();
-            guardian.email = guardian.email;
+            guardianEntity.email = guardian.email;
+            guardianEntity.phrase = guardian.phrase;
             guardianEntity.privateKey = stellarAccount.rawSecretKey().toString('hex');
             guardianEntity.account = stellarAccount.publicKey();
             guardians.push(guardianEntity);
@@ -34,5 +35,13 @@ export class RecoveryService {
         });
         
         return this.galaxyRepository.save(galaxy);
+    }
+
+    async getGalaxy(walletAddress: string) {
+        const galaxy = await this.galaxyRepository.findOne({ where: { recoveryAddress: walletAddress }, relations: ['guardians'] });
+        if (!galaxy) {
+            throw new NotFoundException('Galaxy not found');
+        }
+        return galaxy;
     }
 }
