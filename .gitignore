@@ -1,0 +1,4 @@
+
+# Node modules (binarios grandes)
+node_modules/
+*/node_modules/
