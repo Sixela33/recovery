@@ -14,10 +14,6 @@ class GuardianDto {
 export class CreateGalaxyDto{
   @IsString()
   @IsNotEmpty()
-  name: string;
-
-  @IsString()
-  @IsNotEmpty()
   recoveryAddress: string;
 
   @IsArray()

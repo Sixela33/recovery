@@ -55,7 +55,6 @@ export class RecoveryService {
         }
 
         // Update galaxy basic info
-        galaxy.name = updateGalaxyDto.name || galaxy.name;
         galaxy.recoveryAddress = updateGalaxyDto.recoveryAddress || galaxy.recoveryAddress;
 
         // Handle guardians update if provided

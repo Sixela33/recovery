@@ -27,7 +27,6 @@ const guardianSchema = z.object({
 
 const galaxySchema = z.object({
   id: z.number().optional(),
-  name: z.string().min(1, 'Galaxy name is required'),
   recoveryAddress: z.string().min(1, 'Recovery address is required'),
   guardians: z.array(guardianSchema).min(1, 'At least one guardian is required'),
 });
@@ -56,7 +55,6 @@ export function GuardianForm({
   const form = useForm<GalaxyFormData>({
     resolver: zodResolver(galaxySchema),
     defaultValues: galaxy || {
-      name: '',
       recoveryAddress: walletAddress,
       guardians: [{ email: '', phrase: '' }],
     },
@@ -136,25 +134,6 @@ export function GuardianForm({
       {/* Form */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          {/* Galaxy Name */}
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Galaxy Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter a name for your galaxy"
-                    {...field}
-                    disabled={isLoading}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           {/* Recovery Address */}
           <FormField
             control={form.control}
